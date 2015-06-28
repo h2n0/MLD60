@@ -96,11 +96,15 @@ class Populite extends FlxSprite
 				currentTask = AvalibleTasks.gotoStore;
 			}
 			else if (targetLocation != null && !full) {
+				if (!targetLocation.alive) {
+					targetLocation = null;
+					this.currentTask = AvalibleTasks.wonder;
+				}
 				if (Std.is(targetLocation, Tree)) {
 					var t:Tree = cast(targetLocation, Tree);
-					if (isinRad(t.x, t.y+t.height-10)) {
+					if (isinRad(t.x + t.width / 2, t.y+t.height-10)) {
 						if (--actionTimer <= 0) {
-							t.hurt(5);
+							t.hurt(25);
 							actionTimer = 60;
 							this.currentItem = t.genDrop();
 							fade("+"+this.currentItem.value);
@@ -121,7 +125,7 @@ class Populite extends FlxSprite
 		}
 		else if (currentTask == AvalibleTasks.gotoStore) {
 			if (currentBuildingLoc == null) currentTask = AvalibleTasks.wonder;
-			if (isinRad(currentBuildingLoc.x + currentBuildingLoc.width / 2, currentBuildingLoc.y + currentBuildingLoc.height / 2, 64)) {
+			if (isinRad(currentBuildingLoc.x + currentBuildingLoc.width / 2, currentBuildingLoc.y + currentBuildingLoc.height / 2, currentBuildingLoc.width)) {
 				if (--this.actionTimer <= 0) {
 					if (currentItem.value > 0) {
 						currentBuildingLoc.placeInStoreage(currentItem.type, 1);

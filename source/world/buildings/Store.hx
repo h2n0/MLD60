@@ -1,6 +1,7 @@
 package source.world.buildings;
 
 import source.world.Resource.Res;
+import AssetPaths;
 /**
  * ...
  * @author Elliot Lee-Cerrino
@@ -14,5 +15,6 @@ class Store extends Building
 		this.maximumStorage = 500;
 		this.itemsInStore = new Map<EnumValue,Int>();
 		this.itemsInStore.arrayWrite(Res.wood, 0);
+		this.loadGraphic(AssetPaths.Store__png);
 	}
 }

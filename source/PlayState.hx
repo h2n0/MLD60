@@ -8,13 +8,17 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.group.FlxTypedGroup;
 import haxe.io.ArrayBufferView.ArrayBufferViewData;
+import source.effects.Smoke;
+import source.entitys.Arrow;
 import source.entitys.Populite;
+import source.entitys.Ship;
 import source.world.Container;
 import source.world.Tree;
 import source.Helper;
 import source.world.Building;
 import source.world.Resource.Res;
 import flixel.util.FlxSort;
+import source.world.buildings.Store;
 /**
  * A FlxState which can be used for the actual gameplay.
  */
@@ -33,6 +37,8 @@ class PlayState extends FlxState
 	public var FoodAmt:FlxText;
 	public var days:Int;
 	
+	private var sh:Ship;
+	private var ar:Arrow;
 	
 	public var res:Map<EnumValue,Int>;
 	var t:Int;
@@ -58,12 +64,10 @@ class PlayState extends FlxState
 		
 		ResAmt = new FlxText(10, 10);
 		FoodAmt = new FlxText(10, 20);
-		
-		add(SelectedAge);
-		add(SelectedMale);
-		add(SelectedName);
-		add(FoodAmt);
-		add(ResAmt);
+		sh = new Ship();
+		add(sh);
+		ar = new Arrow();
+		add(ar);
 		t = 1;
 		res = new Map<EnumValue,Int>();
 		addLife();
@@ -117,18 +121,22 @@ class PlayState extends FlxState
 			}
 		}
 		population.sort(FlxSort.byY);
+		if (!sh.alive) {
+			shipFinish();
+			sh.alive = true;
+			sh.destroy();
+		}
 		updateCounters();
 	}	
 	
 	public function addPop(?x:Int = 1):Void {
-		for (i in 0...x) population.add(new Populite(Math.floor(Math.random() * 640), Math.floor(Math.random() * 480)));
+		for (i in 0...x) population.add(new Populite(Math.floor(Math.random() * 640), flash.Lib.current.stage.height - 100));
 	}
 	
 	public function addLife():Void {
 		for (i in 0...5) resources.add(new Tree(Math.floor(Math.random() * 640), Math.floor(Math.random() * 480)));
-		addPop(15);
 		days = 0;
-		
+		resources.sort(FlxSort.byY);
 		addBuilding(50, 50);
 	}
 	
@@ -139,7 +147,7 @@ class PlayState extends FlxState
 				addResources(d.drop.type, d.drop.value);
 			}
 		}
-		buildings.add(new Building(50, 50));
+		buildings.add(new Store(50, 50));
 	}
 	
 	public function addResources(type:EnumValue, val:Int, ?over:Bool = false) { 	
@@ -162,5 +170,14 @@ class PlayState extends FlxState
 		}
 		FoodAmt.text = "Food: " + (res.exists(Res.food)?"" + res.get(Res.food):"0");
 		ResAmt.text = "Res: " + (res.exists(Res.wood)?"" + res.get(Res.wood):"0");
+	}
+	
+	public function shipFinish():Void {	
+		add(SelectedAge);
+		add(SelectedMale);
+		add(SelectedName);
+		add(FoodAmt);
+		add(ResAmt);
+		addPop(15);
 	}
 }
