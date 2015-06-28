@@ -1,6 +1,7 @@
 package source.world;
 
 import flixel.FlxSprite;
+import flixel.FlxG;
 
 /**
  * ...
@@ -15,11 +16,15 @@ class Building extends FlxSprite
 	{
 		super(x, y);
 		this.makeGraphic(64, 64, 0xFF777777);
+		this.maximumStorage = 100;
+		this.itemsInStore = new Map<EnumValue,Int>();
 	}
 	
 	public function placeInStoreage(it:EnumValue, va:Int):Void {
 		if (this.itemsInStore.exists(it)) {
 			this.itemsInStore.arrayWrite(it, this.itemsInStore.get(it) + va);
+		}else {
+			this.itemsInStore.arrayWrite(it, va);
 		}
 	}
 	
@@ -33,7 +38,7 @@ class Building extends FlxSprite
 	
 	public function getAmountOfSpecific(t:EnumValue):Int {
 		if (this.itemsInStore.exists(t)) return this.itemsInStore.get(t);
-		else return -1;
+		else return 0;
 	}
 	
 	public function takesX(t:EnumValue):Bool {

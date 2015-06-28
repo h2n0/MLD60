@@ -53,7 +53,7 @@ class Populite extends FlxSprite
 		this.tasks = AvalibleTasks;
 		this.currentTask = AvalibleTasks.wonder;
 		this.data = new Map<String,String>();
-		this.actionTimer = 0;
+		this.actionTimer = 60;
 		if (this.male)
 			this.makeGraphic(16, 16, 0xFF0000FF);
 		else
@@ -69,7 +69,7 @@ class Populite extends FlxSprite
 	
 	override public function update():Void {
 		if (currentTask == AvalibleTasks.wonder) {
-			if (isinRad(tx,ty,5)) {
+			if (isinRad(tx,ty,10)) {
 				this.tx = Math.ffloor(Math.random() * (640 - 16));
 				this.ty = Math.ffloor(Math.random() * (480 - 16));
 			}else {
@@ -100,10 +100,10 @@ class Populite extends FlxSprite
 					var t:Tree = cast(targetLocation, Tree);
 					if (isinRad(t.x, t.y+t.height-10)) {
 						if (--actionTimer <= 0) {
-							fade("+1");
 							t.hurt(5);
 							actionTimer = 60;
-							this.currentItem = t.drop;
+							this.currentItem = t.genDrop();
+							fade("+"+this.currentItem.value);
 							FlxG.watch.addQuick("Amt Held:", this.currentItem.value);
 							if (this.currentItem != null) {
 								this.full = true;
@@ -121,17 +121,17 @@ class Populite extends FlxSprite
 		}
 		else if (currentTask == AvalibleTasks.gotoStore) {
 			if (currentBuildingLoc == null) currentTask = AvalibleTasks.wonder;
-			if (isinRad(currentBuildingLoc.x + currentBuildingLoc.width / 2, currentBuildingLoc.y + currentBuildingLoc.height /2,64)) {
+			if (isinRad(currentBuildingLoc.x + currentBuildingLoc.width / 2, currentBuildingLoc.y + currentBuildingLoc.height / 2, 64)) {
 				if (--this.actionTimer <= 0) {
-					if(currentItem.value > 0){
+					if (currentItem.value > 0) {
 						currentBuildingLoc.placeInStoreage(currentItem.type, 1);
-						FlxG.log.add(currentBuildingLoc.getAmountOfSpecific(currentItem.type));
+						fade("-1");
 						currentItem.value--;
 						actionTimer = 60;
-						fade("-1");
 					}else {
 						this.full = false;
 						currentTask = AvalibleTasks.gatherResr;
+						actionTimer = 60;
 					}
 				}
 			}

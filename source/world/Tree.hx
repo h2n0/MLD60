@@ -16,9 +16,13 @@ class Tree extends Container
 		super(x, y);
 		this.x = x;
 		this.y = y;
-		this.drop = new Resource(x, y, Res.wood, Math.floor(Math.random() * 4) + 1);
+		this.drop = genDrop();
 		this.makeGraphic(10, 60, 0xFFCCCC00);
 		this.health = 100;
+	}
+	
+	public function genDrop():Resource {
+		return new Resource(this.x, this.y, Res.wood, Math.floor(Math.random() * 4) + 1);
 	}
 	
 }

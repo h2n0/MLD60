@@ -14,6 +14,7 @@ import source.world.Tree;
 import source.Helper;
 import source.world.Building;
 import source.world.Resource.Res;
+import flixel.util.FlxSort;
 /**
  * A FlxState which can be used for the actual gameplay.
  */
@@ -115,6 +116,7 @@ class PlayState extends FlxState
 				}
 			}
 		}
+		population.sort(FlxSort.byY);
 		updateCounters();
 	}	
 	
@@ -140,12 +142,24 @@ class PlayState extends FlxState
 		buildings.add(new Building(50, 50));
 	}
 	
-	public function addResources(type:EnumValue, val:Int) { 	
-		if (!res.exists(type)) res.arrayWrite(type, val);
-		else res.set(type, res.get(type)+val);
+	public function addResources(type:EnumValue, val:Int, ?over:Bool = false) { 	
+		if(!over){
+			if (!res.exists(type)) res.arrayWrite(type, val);
+			else res.set(type, res.get(type) + val);
+		}else {
+			if (!res.exists(type)) res.arrayWrite(type, val);
+			else res.set(type, val);
+		}
 	}
 	
 	public function updateCounters():Void {
+		res.set(Res.wood, 0);
+		res.set(Res.food, 0);
+		for (i in 0...buildings.length) {
+			var b:Building = buildings.members[i];
+			addResources(Res.food, b.getAmountOfSpecific(Res.food));
+			addResources(Res.wood, b.getAmountOfSpecific(Res.wood));
+		}
 		FoodAmt.text = "Food: " + (res.exists(Res.food)?"" + res.get(Res.food):"0");
 		ResAmt.text = "Res: " + (res.exists(Res.wood)?"" + res.get(Res.wood):"0");
 	}
