@@ -33,7 +33,9 @@ class Tree extends Container
 		if (this.health <= 0) {
 			this.alive = false;
 		}
-		if (--this.deathTimer == 0) this.destroy();
+		if (!this.alive){
+			if (--this.deathTimer == 0) this.destroy();
+		}
 	}
 	
 }

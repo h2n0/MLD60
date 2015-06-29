@@ -42,6 +42,10 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
+		urls.push ("assets/images/Button.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
 		urls.push ("assets/images/images-go-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
 		
@@ -143,7 +147,7 @@ class ApplicationMain {
 			borderless: false,
 			company: "HaxeFlixel",
 			depthBuffer: false,
-			file: "FlxProject",
+			file: "TropicSim",
 			fps: Std.int (60),
 			fullscreen: false,
 			hardware: true,

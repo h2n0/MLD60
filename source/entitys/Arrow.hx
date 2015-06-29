@@ -21,7 +21,7 @@ class Arrow extends FlxSprite
 		if (Helper.selectedPop != null) {
 			this.visible = true;
 			this.x = Helper.selectedPop.x + Helper.selectedPop.width / 2 - this.width / 2;
-			this.y = Helper.selectedPop.y - 30;
+			this.y = Helper.selectedPop.y - 20;
 		}else {
 			this.visible = false;
 		}

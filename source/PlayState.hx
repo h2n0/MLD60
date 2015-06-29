@@ -12,6 +12,7 @@ import source.effects.Smoke;
 import source.entitys.Arrow;
 import source.entitys.Populite;
 import source.entitys.Ship;
+import source.gui.Button;
 import source.world.Container;
 import source.world.Tree;
 import source.Helper;
@@ -19,6 +20,8 @@ import source.world.Building;
 import source.world.Resource.Res;
 import flixel.util.FlxSort;
 import source.world.buildings.Store;
+import gui.GUI;
+import haxe.Constraints.Function;
 /**
  * A FlxState which can be used for the actual gameplay.
  */
@@ -29,7 +32,7 @@ class PlayState extends FlxState
 	public var population:FlxTypedGroup<Populite>;
 	public var resources:FlxTypedGroup<Container>;
 	public var buildings:FlxTypedGroup<Building>;
-	
+	public var gui:FlxTypedGroup<GUI>;
 	public var SelectedName:FlxText;
 	public var SelectedAge:FlxText;
 	public var SelectedMale:FlxText;
@@ -39,7 +42,7 @@ class PlayState extends FlxState
 	
 	private var sh:Ship;
 	private var ar:Arrow;
-	
+	private var mouseClick:Function;
 	public var res:Map<EnumValue,Int>;
 	var t:Int;
 	/**
@@ -49,6 +52,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
+		FlxG.camera.bgColor = 0xFFF7D645;
 		population = new FlxTypedGroup<Populite>();
 		add(population);
 		
@@ -57,6 +61,9 @@ class PlayState extends FlxState
 		
 		buildings = new FlxTypedGroup<Building>();
 		add(buildings);
+		
+		gui = new FlxTypedGroup<GUI>();
+		gui.add(new Button(640/2 - 45/2,480 - 55,gui.length));
 		
 		SelectedName = new FlxText(10, 480 - 10 * 4);
 		SelectedAge = new FlxText(10, 480 - 10 * 3);
@@ -90,6 +97,7 @@ class PlayState extends FlxState
 		super.update();
 		if (t++ % (60 * 60) == 0) {
 			days++;
+			FlxG.log.add(days);
 			if (days % 5 == 0) {
 				for (i in 0...population.members.length) population.members[i].ageInc();
 			}
@@ -116,8 +124,27 @@ class PlayState extends FlxState
 						Helper.selectedPop.currentTask = AvalibleTasks.gatherResr;
 						Helper.selectedPop.targetLocation = s;
 						Helper.selectedPop = null;
+						break;
 					}
 				}
+			}
+		}
+		
+		if (FlxG.mouse.justPressed) {
+			for (i in 0...population.length) {
+				var c:Populite = population.members[i];
+				if ((FlxG.mouse.x >= c.x && FlxG.mouse.y >= c.y && FlxG.mouse.x  <= c.x + c.width && FlxG.mouse.y  <= c.y + c.height)) {
+					Helper.selectedPop = c;
+					break;
+				}
+				Helper.selectedPop = null;
+			}
+		}
+		
+		for (i in 0...gui.length) {
+			var g:GUI = gui.members[i];	
+			if ((FlxG.mouse.x >= g.x && FlxG.mouse.y >= g.y && FlxG.mouse.x <= g.x + g.width && FlxG.mouse.y <= g.y + g.height) && FlxG.mouse.justPressed) {
+				if (g.ID == 1) mouseClick = plant;
 			}
 		}
 		population.sort(FlxSort.byY);
@@ -141,13 +168,13 @@ class PlayState extends FlxState
 	}
 	
 	public function addBuilding(x:Float, y:Float):Void {
+		buildings.add(new Store(50, 50));
 		for (i in 0...resources.length) {
 			var d:Container = resources.members[i];
 			if (d.x - 10 > x && d.y - 10 > y && d.x + 64 + 10 < x && d.y + 64 + 10 < y) {
 				addResources(d.drop.type, d.drop.value);
 			}
 		}
-		buildings.add(new Store(50, 50));
 	}
 	
 	public function addResources(type:EnumValue, val:Int, ?over:Bool = false) { 	
@@ -178,6 +205,21 @@ class PlayState extends FlxState
 		add(SelectedName);
 		add(FoodAmt);
 		add(ResAmt);
-		addPop(15);
+		//addPop(15);
+		
+		var a:Populite = new Populite(sh.x + Math.floor(Math.random() * sh.width),sh.y + sh.height - 10);
+		a.setGender(true);
+		a.setAge(25);
+		population.add(a);
+		var b:Populite = new Populite(sh.x + Math.floor(Math.random() * sh.width),sh.y + sh.height - 10);
+		b.setGender(false);
+		a.setAge(23);
+		population.add(b);
+		
+		add(gui);
+	}
+	
+	public function plant():Void {
+		FlxG.log.add("HUI");
 	}
 }

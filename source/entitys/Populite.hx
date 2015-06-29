@@ -48,7 +48,7 @@ class Populite extends FlxSprite
 		super(x, y);
 		this.tx = x;
 		this.ty = y;
-		this.male = (Math.random() > 0.5);
+		this.male = Math.random() > 0.5;
 		this.age = Math.round(Math.random() * 75) + 1;
 		this.tasks = AvalibleTasks;
 		this.currentTask = AvalibleTasks.wonder;
@@ -145,12 +145,6 @@ class Populite extends FlxSprite
 				this.y -= Math.sin(a) * speed;
 			}
 		}
-		var r:Float = this.width;
-		if ((FlxG.mouse.x >= this.x && FlxG.mouse.y >= this.y && FlxG.mouse.x  <= this.x + r && FlxG.mouse.y  <=this.ty + r) && FlxG.mouse.pressed) {
-			Helper.selectedPop = this;
-			FlxG.watch.addQuick("Name:", this.data.get("Name"));
-			FlxG.watch.addQuick("Amt Held:", this.currentItem);
-		}
 	}
 	
 	public function ageInc():Void {
@@ -183,5 +177,23 @@ class Populite extends FlxSprite
 	
 	private function fade(t:String):Void {
 		FlxG.state.add(new FadeText(this.x + this.width / 2, this.y - 10,t));
+	}
+	
+	public function setGender(male:Bool):Void {
+		if (male)
+			this.makeGraphic(16, 16, 0xFF0000FF);
+		else
+			this.makeGraphic(16, 16, 0xFFFF00FF);
+			
+		if (this.age < 12) this.setGraphicSize(8, 8);
+		this.male = male;
+		
+		this.data.set("Name", getName());
+	}
+	
+	public function setAge(a:Int):Void {
+		this.age = a;
+		this.data.set("Age", ""+a);
+		setGender(this.male);
 	}
 }

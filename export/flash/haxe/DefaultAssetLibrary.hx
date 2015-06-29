@@ -49,6 +49,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("assets/data/data-goes-here.txt", AssetType.TEXT);
 		className.set ("assets/images/arrow.png", __ASSET__assets_images_arrow_png);
 		type.set ("assets/images/arrow.png", AssetType.IMAGE);
+		className.set ("assets/images/Button.png", __ASSET__assets_images_button_png);
+		type.set ("assets/images/Button.png", AssetType.IMAGE);
 		className.set ("assets/images/images-go-here.txt", __ASSET__assets_images_images_go_here_txt);
 		type.set ("assets/images/images-go-here.txt", AssetType.TEXT);
 		className.set ("assets/images/Ship.png", __ASSET__assets_images_ship_png);
@@ -77,6 +79,10 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		type.set (id, AssetType.TEXT);
 		id = "assets/images/arrow.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/Button.png";
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
@@ -141,6 +147,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
+		
 		#end
 		
 		#if (windows || mac || linux)
@@ -152,6 +159,9 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		className.set ("assets/images/arrow.png", __ASSET__assets_images_arrow_png);
 		type.set ("assets/images/arrow.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/Button.png", __ASSET__assets_images_button_png);
+		type.set ("assets/images/Button.png", AssetType.IMAGE);
 		
 		className.set ("assets/images/images-go-here.txt", __ASSET__assets_images_images_go_here_txt);
 		type.set ("assets/images/images-go-here.txt", AssetType.TEXT);
@@ -782,6 +792,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 @:keep @:bind #if display private #end class __ASSET__assets_data_data_goes_here_txt extends flash.utils.ByteArray { }
 @:keep @:bind #if display private #end class __ASSET__assets_images_arrow_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_button_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_images_go_here_txt extends flash.utils.ByteArray { }
 @:keep @:bind #if display private #end class __ASSET__assets_images_ship_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_smoke_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
@@ -808,6 +819,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 
+
 #else
 
 
@@ -817,6 +829,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 @:file("assets/data/data-goes-here.txt") #if display private #end class __ASSET__assets_data_data_goes_here_txt extends lime.utils.ByteArray {}
 @:image("assets/images/arrow.png") #if display private #end class __ASSET__assets_images_arrow_png extends lime.graphics.Image {}
+@:image("assets/images/Button.png") #if display private #end class __ASSET__assets_images_button_png extends lime.graphics.Image {}
 @:file("assets/images/images-go-here.txt") #if display private #end class __ASSET__assets_images_images_go_here_txt extends lime.utils.ByteArray {}
 @:image("assets/images/Ship.png") #if display private #end class __ASSET__assets_images_ship_png extends lime.graphics.Image {}
 @:image("assets/images/smoke.png") #if display private #end class __ASSET__assets_images_smoke_png extends lime.graphics.Image {}
